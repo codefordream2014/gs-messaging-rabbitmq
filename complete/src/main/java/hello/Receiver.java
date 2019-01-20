@@ -1,20 +1,26 @@
 package hello;
 
-import java.util.concurrent.CountDownLatch;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class Receiver {
 
-    private CountDownLatch latch = new CountDownLatch(1);
+    private final static Integer FACTOR = 2;
 
-    public void receiveMessage(String message) {
+    private static Integer SLEEP_IN_SECS = 5000;
+
+    public void receiveMessage(String message) throws InterruptedException {
+        System.out.println("SLEEP TIME : " + SLEEP_IN_SECS);
         System.out.println("Received <" + message + ">");
-        latch.countDown();
+        try {
+            //mock throw exception to call restfull api;
+            String str = null;
+            str.contains(message);
+        } catch (Exception e) {
+            SLEEP_IN_SECS = (SLEEP_IN_SECS * FACTOR);
+            Thread.sleep(SLEEP_IN_SECS);
+            throw e;
+        }
     }
-
-    public CountDownLatch getLatch() {
-        return latch;
-    }
-
 }
